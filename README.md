@@ -36,4 +36,4 @@ Without this setting, use the **Open** button or drag and drop instead.
 
 ## Third-party libraries
 
-Bundled in `lib/` (Manifest V3 forbids remote scripts): [marked](https://github.com/markedjs/marked), [DOMPurify](https://github.com/cure53/DOMPurify) and [highlight.js](https://highlightjs.org/). Their licenses are in `lib/` where provided by the packages.
+Bundled in `lib/` (Manifest V3 forbids remote scripts): [marked](https://github.com/markedjs/marked), [DOMPurify](https://github.com/cure53/DOMPurify) and [highlight.js](https://highlightjs.org/). Their licenses are in `lib/`.
