@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MD Studio – Privacy Policy</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { max-width: 720px; margin: 48px auto; padding: 0 20px; font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  h1 { font-size: 1.9rem; margin-bottom: .2em; }
+  h2 { font-size: 1.2rem; margin-top: 2em; }
+  .meta { color: gray; margin-top: 0; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .92em; }
+</style>
+</head>
+<body>
+<h1>MD Studio – Privacy Policy</h1>
+<p class="meta">Effective 16 November 2026</p>
+
+<p>MD Studio is a Chrome extension for reading and editing Markdown files. It does not collect, transmit, sell or share personal data. It has no servers, accounts, analytics or advertising.</p>
+
+<h2>What is stored on your device</h2>
+<ul>
+  <li>The documents you have open, including unsaved text, in the extension page's local storage, so your session can be restored.</li>
+  <li>Handles to files you opened or saved, and a short list of recent files, in the extension's IndexedDB. Chrome asks for your permission again when a file needs to be re-opened for writing.</li>
+  <li>Interface preferences such as theme, full-width mode and the outline panel.</li>
+</ul>
+<p>This data never leaves your device. You can remove it by removing the extension or clearing its site data.</p>
+
+<h2>Network access</h2>
+<ul>
+  <li>The extension fetches a Markdown file by URL only when you open that URL in it (for example by clicking the toolbar icon on a <code>.md</code> page). For <code>http</code>/<code>https</code> sites, Chrome asks you to grant access to that single origin first.</li>
+  <li>If a document references an image by <code>http</code>/<code>https</code> URL, Chrome loads that image to render the preview, which contacts the image's host. This is the same as viewing the document in a browser. The extension does not send your content anywhere.</li>
+  <li>The extension makes no other network requests.</li>
+</ul>
+
+<h2>Permissions</h2>
+<ul>
+  <li><strong>activeTab</strong>: to read the current tab's URL when you click the toolbar icon.</li>
+  <li><strong>webNavigation</strong> and <strong>file access</strong>: to open local <code>.md</code> files in the editor when you navigate to them. Local files are read only when you open them.</li>
+  <li><strong>Optional website access</strong>: requested per site, only when you choose to open a Markdown URL from it.</li>
+</ul>
+
+<h2>Third parties</h2>
+<p>No data is shared with third parties. All code, including the open-source libraries marked, DOMPurify and highlight.js, is bundled in the extension. No remote code is loaded.</p>
+
+<h2>Changes and contact</h2>
+<p>If this policy changes, the updated version will be published at this address with a new effective date.</p>
+<p>Questions: open an issue at <a href="https://github.com/iamjpsonkar/JaySoft-MD-Studio/issues">github.com/iamjpsonkar/JaySoft-MD-Studio</a>.</p>
+</body>
+</html>

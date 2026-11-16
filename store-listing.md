@@ -43,30 +43,20 @@ To open local files by URL, enable "Allow access to file URLs" for MD Studio on 
 
 **Data usage disclosure (suggested answers):** collects no user data; does not sell or transfer data; no data used for unrelated purposes.
 
-## Privacy policy (host this at a public URL, for example GitHub Pages or the repo's rendered file)
+## Privacy policy
 
-**MD Studio privacy policy**
+Use this URL in the dashboard once GitHub Pages is enabled (source: `docs/privacy.html`):
 
-MD Studio does not collect, transmit, sell or share personal data. It has no servers, accounts, analytics or advertising.
+https://iamjpsonkar.github.io/JaySoft-MD-Studio/privacy.html
 
-What is stored, on your device only:
-- Open documents and unsaved text, in the extension page's local storage, so your session can be restored.
-- Handles to files you opened or saved, and a short recent-files list, in the extension's IndexedDB.
-- Interface preferences (theme, full-width, outline).
-
-Network access: the extension only requests a Markdown URL when you open it from that URL, and only from the origin you approved. It makes no other network requests.
-
-You can remove all stored data by removing the extension or clearing its site data.
-
-Contact: jsonkar@gofynd.com
-(Replace with the contact you want to publish.)
+The policy lists a GitHub issues link as its contact, so no personal email is published. The dashboard separately asks for a contact email, which is not shown in the policy.
 
 ## Publishing steps
 
 1. Register at the Chrome Web Store Developer Dashboard. Per the official docs a one-time registration fee ($5 at time of writing) is required, and you must accept the developer terms. Verify the current fee on the registration page.
 2. Create a new item and upload `md-studio-vX.Y.Z.zip` from the GitHub release (the zip, not the crx).
 3. Fill in the listing from this file. You need a 128x128 icon (`icons/icon128.png`), at least one screenshot (1280x800 or 640x400 are the commonly used sizes, check the official image requirements), and optionally a 440x280 promo tile.
-4. Paste the permission justifications, privacy-practices answers and privacy policy URL.
+4. Paste the permission justifications, privacy-practices answers and the privacy policy URL above.
 5. Submit for review. Review time varies, and I found no authoritative figure.
 
 Review risk (my assessment, not a documented rule): `file:///*` plus `webNavigation` is a broad-looking combination, so expect scrutiny. The justifications above are written to address that.
