@@ -27,6 +27,33 @@ Without this setting, use the **Open** button or drag and drop instead.
 - **Editing:** formatting toolbar, `Ctrl/Cmd+B`, `I`, `K`, Tab to indent, list auto-continue.
 - **Other:** outline panel, full-width toggle, light/dark/auto theme, tabs, and unsaved text restored when you reopen the editor.
 
+## Releases
+
+Pushing a tag that matches the manifest version builds and publishes a GitHub release (`.github/workflows/release.yml`):
+
+```sh
+# 1. bump "version" in manifest.json and commit it
+# 2. tag and push
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+The workflow fails if the tag and `manifest.json` version differ. The release contains:
+
+- `md-studio-vX.Y.Z.zip`: the packed extension. Unzip it and use **Load unpacked**, or upload it to the Chrome Web Store.
+- `md-studio-vX.Y.Z.crx`: a signed CRX, only if the `CRX_PRIVATE_KEY` repository secret is set.
+- `SHA256SUMS.txt`: checksums for the files above.
+
+Chrome on Windows and macOS generally refuses to install a `.crx` from outside the Web Store unless enterprise policy allows it, so the zip is the practical option for most people.
+
+### Optional: signed CRX
+
+```sh
+openssl genrsa -out key.pem 2048
+```
+
+Add the contents of `key.pem` as a repository secret named `CRX_PRIVATE_KEY` (Settings, Secrets and variables, Actions), then store the file somewhere safe and never commit it. The extension ID is derived from this key, so losing it or switching keys changes the ID.
+
 ## Notes
 
 - Saving checks whether the file changed on disk after you opened it and asks before overwriting. CRLF line endings are preserved. A leading BOM is dropped on save.
