@@ -33,7 +33,7 @@
     recentBox: $('recentBox'), recentList: $('recentList'),
   };
 
-  const state = { docs: [], activeId: null, view: 'split', theme: 'auto', outline: false, wide: true };
+  const state = { docs: [], activeId: null, view: 'preview', theme: 'auto', outline: false, wide: true };
   const activeDoc = () => state.docs.find((d) => d.id === state.activeId) || null;
   const isDirty = (d) => d.text !== d.saved;
 
@@ -566,13 +566,12 @@
   darkQuery.addEventListener('change', applyTheme);
 
   function savePrefs() {
-    try { localStorage.setItem(PREFS_KEY, JSON.stringify({ view: state.view, theme: state.theme, outline: state.outline, wide: state.wide })); }
+    try { localStorage.setItem(PREFS_KEY, JSON.stringify({ theme: state.theme, outline: state.outline, wide: state.wide })); }
     catch (err) { log('warn', 'prefs-save-failed', { error: String(err) }); }
   }
   function loadPrefs() {
     try {
       const p = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}');
-      if (VIEWS.includes(p.view)) state.view = p.view;
       if (THEMES.includes(p.theme)) state.theme = p.theme;
       state.outline = Boolean(p.outline);
       if (typeof p.wide === 'boolean') state.wide = p.wide;
@@ -714,6 +713,7 @@
 
   function runCommand(name) {
     if (!activeDoc()) return;
+    if (state.view === 'preview') setView('split'); // formatting needs a visible editor
     log('debug', 'command', { name });
     COMMANDS[name]?.();
   }
