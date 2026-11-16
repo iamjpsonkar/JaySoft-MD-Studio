@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MD Studio</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="lib/hljs-light.css" id="hlLight">
+  <link rel="stylesheet" href="lib/hljs-dark.css" id="hlDark" disabled>
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img src="icons/icon32.png" alt="" width="22" height="22"><span>MD Studio</span></div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Open documents"></div>
+    <button class="icon-btn" id="btnNew" title="New document" aria-label="New document">+</button>
+    <div class="spacer"></div>
+    <button class="btn" id="btnOpen" title="Open file(s)">Open</button>
+    <button class="btn" id="btnSaveAs" title="Save as… (Shift+Ctrl/Cmd+S)">Save as</button>
+    <button class="btn primary" id="btnSave" title="Save (Ctrl/Cmd+S)">Save</button>
+    <button class="btn" id="btnTheme" title="Theme: auto / light / dark">Auto</button>
+  </header>
+
+  <div class="toolbar" id="toolbar">
+    <div class="group">
+      <button class="tb" data-cmd="h1" title="Heading 1">H1</button>
+      <button class="tb" data-cmd="h2" title="Heading 2">H2</button>
+      <button class="tb" data-cmd="h3" title="Heading 3">H3</button>
+    </div>
+    <div class="group">
+      <button class="tb" data-cmd="bold" title="Bold (Ctrl/Cmd+B)"><b>B</b></button>
+      <button class="tb" data-cmd="italic" title="Italic (Ctrl/Cmd+I)"><i>I</i></button>
+      <button class="tb" data-cmd="strike" title="Strikethrough"><s>S</s></button>
+      <button class="tb mono" data-cmd="code" title="Inline code">&lt;/&gt;</button>
+    </div>
+    <div class="group">
+      <button class="tb" data-cmd="ul" title="Bullet list">• List</button>
+      <button class="tb" data-cmd="ol" title="Numbered list">1. List</button>
+      <button class="tb" data-cmd="task" title="Task list">☑ Task</button>
+      <button class="tb" data-cmd="quote" title="Quote">❝</button>
+    </div>
+    <div class="group">
+      <button class="tb" data-cmd="link" title="Link (Ctrl/Cmd+K)">Link</button>
+      <button class="tb" data-cmd="image" title="Image">Image</button>
+      <button class="tb mono" data-cmd="codeblock" title="Code block">{ }</button>
+      <button class="tb" data-cmd="table" title="Table">Table</button>
+      <button class="tb" data-cmd="hr" title="Horizontal rule">―</button>
+    </div>
+    <div class="spacer"></div>
+    <button class="tb" id="btnWide" title="Full-width content (off = centered reading column)">Full width</button>
+    <button class="tb" id="btnOutline" title="Toggle outline">Outline</button>
+    <div class="segmented" id="viewSwitch" role="group" aria-label="View mode">
+      <button data-view="edit" title="Editor only">Edit</button>
+      <button data-view="split" title="Editor and preview (Ctrl/Cmd+E cycles)">Split</button>
+      <button data-view="preview" title="Preview only">Preview</button>
+    </div>
+  </div>
+
+  <main id="main" data-view="split">
+    <aside class="outline" id="outline" hidden>
+      <div class="outline-title">Outline</div>
+      <nav id="outlineList"></nav>
+    </aside>
+    <section class="pane editor-pane" id="editorPane">
+      <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off"
+                aria-label="Markdown editor" placeholder="Start writing Markdown…"></textarea>
+    </section>
+    <section class="pane preview-pane" id="preview" aria-label="Preview">
+      <article class="markdown-body" id="previewBody"></article>
+    </section>
+
+    <div class="welcome" id="welcome" hidden>
+      <div class="welcome-card">
+        <img src="icons/icon128.png" alt="" width="64" height="64">
+        <h1>MD Studio</h1>
+        <p>Open a Markdown file to read and edit it, or drop one anywhere on this page.</p>
+        <div class="welcome-actions">
+          <button class="btn primary big" id="welcomeOpen">Open file…</button>
+          <button class="btn big" id="welcomeNew">New document</button>
+        </div>
+        <div class="recent" id="recentBox" hidden>
+          <h2>Recent files</h2>
+          <ul id="recentList"></ul>
+        </div>
+        <p class="hint">Tip: click the toolbar icon while viewing a <code>.md</code> URL to open it here.
+          For <code>file://</code> pages, enable “Allow access to file URLs” on the extension’s details page.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="statusbar">
+    <span id="stFile">—</span>
+    <span class="dot-sep">•</span>
+    <span id="stPos">Ln 1, Col 1</span>
+    <div class="spacer"></div>
+    <span id="stStats">0 words</span>
+    <span class="dot-sep">•</span>
+    <span id="stSave">Saved</span>
+  </footer>
+
+  <div class="drop-overlay" id="dropOverlay" hidden><div>Drop Markdown files to open</div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="lib/purify.min.js"></script>
+  <script src="lib/marked.min.js"></script>
+  <script src="lib/highlight.min.js"></script>
+  <script src="editor.js"></script>
+</body>
+</html>
