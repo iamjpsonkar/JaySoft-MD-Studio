@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "MD Studio",
+  "version": "1.1.0",
+  "description": "Read and edit any Markdown file with a live preview, tabs, outline and dark mode.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Open in MD Studio",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["activeTab", "webNavigation"],
+  "host_permissions": ["file:///*"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+  }
+}
