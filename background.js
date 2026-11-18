@@ -19,25 +19,9 @@ function isMarkdownUrl(raw) {
   }
 }
 
+/** Every call opens its own editor tab: tabs never share documents or sessions (each keeps its own in the tab's session storage). */
 async function openEditor(src) {
   const editorUrl = chrome.runtime.getURL(EDITOR_PAGE);
-  const existing = await chrome.tabs.query({ url: `${editorUrl}*` });
-
-  if (existing.length > 0) {
-    const tab = existing[0];
-    log('info', 'focus-existing-editor', { tabId: tab.id, hasSrc: Boolean(src) });
-    await chrome.tabs.update(tab.id, { active: true });
-    await chrome.windows.update(tab.windowId, { focused: true });
-    if (src) {
-      try {
-        await chrome.tabs.sendMessage(tab.id, { type: 'md-studio:open-src', src });
-      } catch (err) {
-        log('error', 'send-open-src-failed', { tabId: tab.id, error: String(err) });
-      }
-    }
-    return;
-  }
-
   const target = src ? `${editorUrl}?src=${encodeURIComponent(src)}` : editorUrl;
   log('info', 'create-editor-tab', { hasSrc: Boolean(src) });
   await chrome.tabs.create({ url: target });
@@ -72,30 +56,19 @@ chrome.action.onClicked.addListener(async (tab) => {
   }
 });
 
-// Navigating straight to a local Markdown file (typed URL, bookmark, link) opens it in the editor.
+// Navigating straight to a local Markdown file (typed URL, bookmark, link) opens it in the editor: the tab you navigate in becomes its
+// own editor tab, so the raw file is never shown as plain text and nothing is shared with other editor tabs.
 // Requires "Allow access to file URLs" for this extension; without it Chrome never fires this for file:// pages.
 const FILE_SUFFIXES = ['.md', '.MD', '.markdown', '.mdown', '.mkd', '.mdx'];
-const isBlankTab = (tab) => !tab?.url || tab.url === 'about:blank' || tab.url.startsWith('chrome://newtab');
+const FILE_FILTER = { url: FILE_SUFFIXES.map((pathSuffix) => ({ schemes: ['file'], pathSuffix })) };
 
 chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   if (details.frameId !== 0) return;
   log('info', 'file-navigation-detected', { tabId: details.tabId });
   try {
     const editorUrl = chrome.runtime.getURL(EDITOR_PAGE);
-    const existing = await chrome.tabs.query({ url: `${editorUrl}*` });
-    if (existing.length === 0) {
-      // Reuse the navigating tab so no extra blank tab is left behind.
-      await chrome.tabs.update(details.tabId, { url: `${editorUrl}?src=${encodeURIComponent(details.url)}` });
-      return;
-    }
-    // One editor tab at a time: its session lives in that page's storage.
-    await openEditor(details.url);
-    const navTab = await chrome.tabs.get(details.tabId).catch(() => null);
-    if (navTab && navTab.id !== existing[0].id && isBlankTab(navTab)) {
-      log('info', 'closing-blank-navigation-tab', { tabId: details.tabId });
-      await chrome.tabs.remove(details.tabId);
-    }
+    await chrome.tabs.update(details.tabId, { url: `${editorUrl}?src=${encodeURIComponent(details.url)}` });
   } catch (err) {
     log('error', 'file-navigation-redirect-failed', { tabId: details.tabId, error: String(err) });
   }
-}, { url: FILE_SUFFIXES.map((pathSuffix) => ({ schemes: ['file'], pathSuffix })) });
+}, FILE_FILTER);

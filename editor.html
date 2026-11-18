@@ -47,26 +47,66 @@
       <button class="tb" data-cmd="hr" title="Horizontal rule">―</button>
     </div>
     <div class="spacer"></div>
+    <div class="group">
+      <button class="tb" id="btnFind" title="Find and replace (Ctrl/Cmd+F)">Find</button>
+      <button class="tb" id="btnTransform" title="Format tables, sort, renumber, reflow, table of contents…">Transform ▾</button>
+      <button class="tb" id="btnExport" title="Copy or save as HTML, plain text, print / PDF">Export ▾</button>
+      <button class="tb" id="btnProblems" title="Check the Markdown for problems">Problems <span class="badge" id="problemCount" hidden></span></button>
+    </div>
+    <button class="tb" data-always id="btnViewMenu" title="Line numbers, word wrap, synced scrolling">View ▾</button>
     <button class="tb" id="btnWide" title="Full-width content (off = centered reading column)">Full width</button>
-    <button class="tb" id="btnOutline" title="Toggle outline">Outline</button>
+    <button class="tb" data-always id="btnOutline" title="Toggle outline">Outline</button>
+    <button class="tb" data-always id="btnPalette" title="Command palette (Ctrl/Cmd+Shift+P or F1)">Commands</button>
     <div class="segmented" id="viewSwitch" role="group" aria-label="View mode">
       <button data-view="edit" title="Editor only">Edit</button>
       <button data-view="split" title="Editor and preview (Ctrl/Cmd+E cycles)">Split</button>
       <button data-view="preview" title="Preview only">Preview</button>
+      <button data-view="diff" title="Compare with the saved version or another tab">Diff</button>
     </div>
   </div>
 
   <main id="main" data-view="split">
-    <aside class="outline" id="outline" hidden>
-      <div class="outline-title">Outline</div>
-      <nav id="outlineList"></nav>
-    </aside>
-    <section class="pane editor-pane" id="editorPane">
-      <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off"
-                aria-label="Markdown editor" placeholder="Start writing Markdown…"></textarea>
-    </section>
-    <section class="pane preview-pane" id="preview" aria-label="Preview">
-      <article class="markdown-body" id="previewBody"></article>
+    <div class="work" id="work">
+      <aside class="outline" id="outline" hidden>
+        <div class="outline-title">Outline</div>
+        <nav id="outlineList"></nav>
+      </aside>
+      <section class="pane editor-pane" id="editorPane">
+        <div class="editor" id="editorBox" data-wrap="on" data-lines="on">
+          <div class="ed-gutter" aria-hidden="true"></div>
+          <div class="ed-main">
+            <div class="ed-find" aria-hidden="true"></div>
+            <div class="ed-brk" aria-hidden="true"></div>
+            <div class="ed-hl" aria-hidden="true"></div>
+            <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off"
+                      aria-label="Markdown editor" placeholder="Start writing Markdown…"></textarea>
+          </div>
+        </div>
+      </section>
+      <div class="vsplit" id="paneSplit" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize; double-click to reset" aria-label="Resize editor and preview"></div>
+      <section class="pane preview-pane" id="preview" aria-label="Preview">
+        <article class="markdown-body" id="previewBody"></article>
+      </section>
+      <section class="pane diff-pane" id="diffPane" aria-label="Differences">
+        <div class="diff-bar">
+          <label class="check">Compare with <select id="diffAgainst" class="field"></select></label>
+          <span class="chips" id="diffStats"></span>
+          <div class="spacer"></div>
+          <label class="check" title="Collapse unchanged lines"><input type="checkbox" id="diffCollapse" checked> hide unchanged</label>
+          <button class="tb" id="diffPrev" title="Previous change">↑</button>
+          <button class="tb" id="diffNext" title="Next change">↓</button>
+          <span class="meta" id="diffPos"></span>
+        </div>
+        <div class="diff-body" id="diffBody"></div>
+      </section>
+    </div>
+    <section class="problems" id="problems" hidden aria-label="Problems">
+      <div class="problems-bar">
+        <strong>Problems</strong><span class="meta" id="problemSummary"></span>
+        <div class="spacer"></div>
+        <button class="tb" id="problemsClose" title="Close" aria-label="Close problems">✕</button>
+      </div>
+      <div class="problems-list" id="problemList"></div>
     </section>
 
     <div class="welcome" id="welcome" hidden>
@@ -78,10 +118,15 @@
           <button class="btn primary big" id="welcomeOpen">Open file…</button>
           <button class="btn big" id="welcomeNew">New document</button>
         </div>
+        <div class="restore" id="restoreBox" hidden>
+          <button class="btn" id="btnRestore" type="button">Restore your last session</button>
+          <button class="tb" id="btnDismissRestore" type="button" title="Forget the last session">Dismiss</button>
+        </div>
         <div class="recent" id="recentBox" hidden>
           <h2>Recent files</h2>
           <ul id="recentList"></ul>
         </div>
+        <p class="hint" id="webHint" hidden>This is the web version. Everything stays in your browser tab: nothing is uploaded. The Chrome extension also opens <code>.md</code> pages you are browsing.</p>
         <p class="hint">Tip: click the toolbar icon while viewing a <code>.md</code> URL to open it here.
           For <code>file://</code> pages, enable “Allow access to file URLs” on the extension’s details page.</p>
       </div>
@@ -92,18 +137,37 @@
     <span id="stFile">—</span>
     <span class="dot-sep">•</span>
     <span id="stPos">Ln 1, Col 1</span>
+    <button class="tb st-btn" id="stEol" title="Line ending of this document: click to switch (used when saving)">LF</button>
     <div class="spacer"></div>
     <span id="stStats">0 words</span>
     <span class="dot-sep">•</span>
     <span id="stSave">Saved</span>
   </footer>
 
+  <input type="file" id="fileInput" multiple hidden tabindex="-1" aria-hidden="true"
+    accept=".md,.markdown,.mdown,.mkd,.mdx,.txt,text/markdown,text/plain">
+  <div class="palette-overlay" id="palette" hidden>
+    <div class="palette" role="dialog" aria-label="Command palette">
+      <input type="text" id="palInput" class="field" placeholder="Type a command…" autocomplete="off" spellcheck="false" aria-label="Command" aria-controls="palList">
+      <ul id="palList" role="listbox"></ul>
+    </div>
+  </div>
   <div class="drop-overlay" id="dropOverlay" hidden><div>Drop Markdown files to open</div></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="lib/purify.min.js"></script>
   <script src="lib/marked.min.js"></script>
   <script src="lib/highlight.min.js"></script>
+  <script src="core/ns.js"></script>
+  <script src="core/find.js"></script>
+  <script src="core/editing.js"></script>
+  <script src="core/textdiff.js"></script>
+  <script src="core/mdhighlight.js"></script>
+  <script src="core/mdtransform.js"></script>
+  <script src="core/mdlint.js"></script>
+  <script src="core/mdexport.js"></script>
+  <script src="core/editor-widget.js"></script>
+  <script src="core/ui.js"></script>
   <script src="editor.js"></script>
 </body>
 </html>

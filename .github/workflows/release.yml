@@ -30,16 +30,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Syntax check scripts
-        run: |
-          node --check editor.js
-          node --check background.js
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
 
       - name: Stage extension files
         run: |
           mkdir -p build/md-studio dist
-          cp -r manifest.json background.js editor.html editor.css editor.js icons lib build/md-studio/
+          cp -r manifest.json background.js editor.html editor.css editor.js icons lib core build/md-studio/
           find build -name '.DS_Store' -delete
           find build -type f | sort
 
