@@ -1,6 +1,6 @@
 {
   "name": "md-studio",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "description": "MD Studio Chrome extension: read and edit Markdown with a live preview.",
   "scripts": {

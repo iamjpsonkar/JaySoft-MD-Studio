@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MD Studio",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Read and edit any Markdown file with a live preview, tabs, outline and dark mode.",
   "icons": {
     "16": "icons/icon16.png",
