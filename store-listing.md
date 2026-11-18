@@ -45,9 +45,9 @@ To open local files by URL, enable "Allow access to file URLs" for MD Studio on 
 
 ## Privacy policy
 
-Use this URL in the dashboard once GitHub Pages is enabled (source: `docs/privacy.html`):
+Use this URL in the dashboard once GitHub Pages is enabled (source: `docs/privacy.html`, Pages from branch `main`, folder `/ (root)`):
 
-https://iamjpsonkar.github.io/JaySoft-MD-Studio/privacy.html
+https://iamjpsonkar.github.io/JaySoft-MD-Studio/docs/privacy.html
 
 The policy lists a GitHub issues link as its contact, so no personal email is published. The dashboard separately asks for a contact email, which is not shown in the policy.
 

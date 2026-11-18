@@ -21,11 +21,15 @@
 
 <h2>What is stored on your device</h2>
 <ul>
-  <li>The documents you have open, including unsaved text, in the extension page's local storage, so your session can be restored.</li>
+  <li>The documents you have open in a tab, including unsaved text, in that tab's session storage, so a reload of the tab brings them back. It is not shared with other tabs and is removed when the tab closes.</li>
+  <li>The most recent session that had documents (including unsaved text), in the extension's local storage, so the welcome screen of an empty tab can offer to restore it. Choosing Dismiss there erases it; it is replaced by the next session that has documents.</li>
   <li>Handles to files you opened or saved, and a short list of recent files, in the extension's IndexedDB. Chrome asks for your permission again when a file needs to be re-opened for writing.</li>
-  <li>Interface preferences such as theme, full-width mode and the outline panel.</li>
+  <li>Interface preferences such as theme, full-width mode, the outline panel, line numbers, word wrap and the size of the editor and preview.</li>
 </ul>
 <p>This data never leaves your device. You can remove it by removing the extension or clearing its site data.</p>
+
+<h2>The web version</h2>
+<p>MD Studio is also available as a web page. It runs entirely in your browser tab and makes no network requests of its own. Because every project hosted under a <code>github.io</code> account shares one browser storage area, the web version keeps your open documents in session storage (this tab only, gone when it closes) instead of local storage. Files you open or drop stay on your device; where the browser cannot write files in place, Save downloads a copy.</p>
 
 <h2>Network access</h2>
 <ul>
